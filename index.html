@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sanctuarium</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Sanctuarium">
+    <meta name="theme-color" content="#990000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Bangers&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Pirata+One&family=Almendra+Display&family=MedievalSharp&display=swap" rel="stylesheet">
+    <!-- ERREUR 3 CORRIGÉE : <h1> et <p> retirés du <head> (ils sont maintenant dans le <body>) -->
+    <style>
+        
+    :root {
+    --primary: #990000;
+    --text: #f8fafc;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+body {
+    font-family: 'Patrick Hand', cursive;
+    color: var(--text);
+    background: #000;
+    overflow-x: hidden;
+}
+
+/* ================= FOND ================= */
+
+#bg-panorama {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 300vw;
+
+    background-image: url("arriereplan.PNG");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    background-position: left center;
+
+    z-index: -2;
+    transition: transform 0.35s ease;
+}
+
+
+#bg-fog {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(circle at 20% 30%, rgba(255,0,0,0.08), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(120,0,0,0.10), transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(0,0,0,0.6), transparent 60%);
+    animation: fogMove 12s ease-in-out infinite alternate;
+}
+
+@keyframes fogMove {
+    0% { transform: translateX(-10px); }
+    100% { transform: translateX(10px); }
+}
+
+/* ================= APP ================= */
+
+.app-container {
+    width: 100%;
+    padding: 20px 15px 140px;
+}
+
+/* ================= BULLES ================= */
+
+.bubbles-grid .bubble {
+    width: 100px !important;
+    height: 90px !important; 
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    border: 1px solid rgba(255, 69, 0, 0.4) !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 10px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+}
+
+.bubbles-grid .bubble-label {
+    font-size: 14px !important; 
+    color: #ff4500 !important;
+    text-transform: uppercase !important;
+    font-family: 'Cinzel', serif !important;
+    margin-bottom: 5px !important;
+    letter-spacing: 1px;
+}
+
+.bubbles-grid .bubble-val {
+    font-size: 24px !important; 
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px #000 !important;
+    font-family: 'Bangers', cursive !important;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ================= SWIPE MOBILE ================= */
+
+#swipe-wrapper {
+    overflow: hidden;
+}
+
+#swipe-track {
+    display: flex;
+    width: 300%;
+    transform: translateX(-33.33%);
+    transition: transform 0.35s ease;
+}
+
+.view-pane {
+    width: 33.33%;
+    padding: 0 5px;
+}
+
+/* ================= NAV ================= */
+
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.95);
+    border-top: 2px solid var(--primary);
+    display: flex;
+}
+.section-title {
+    display: inline-block;
+    padding: 6px 14px;
+    margin-bottom: 10px;
+
+    background: rgba(153, 0, 0, 0.20);
+    border: 1px solid rgba(153, 0, 0, 0.25);
+
+    border-radius: 999px;
+
+    color: #aaa;
+    font-family: Cinzel, serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    text-align: center;
+}
+.cat-card {
+    background: rgba(153, 0, 0, 0.06);
+    border: 1px solid rgba(153, 0, 0, 0.15);
+
+    border-radius: 16px;
+
+    margin-bottom: 12px;
+    padding: 12px;
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    box-shadow: 
+        0 0 10px rgba(153, 0, 0, 0.08),
+        inset 0 0 10px rgba(0,0,0,0.4);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cat-card:active {
+    transform: scale(0.98);
+}
+
+.cat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-family: Cinzel, serif;
+    font-size: 13px;
+    color: #ddd;
+
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+.cat-card:hover {
+    box-shadow: 
+        0 0 18px rgba(153, 0, 0, 0.18),
+        inset 0 0 12px rgba(0,0,0,0.5);
+}
+.cat-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+
+    filter: drop-shadow(0 0 6px rgba(153,0,0,0.7));
+}
+.btn-glass {
+    padding: 6px 10px;
+    font-size: 13px;
+
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(153,0,0,0.35);
+
+    backdrop-filter: blur(6px);
+
+    color: #ddd;
+
+    box-shadow: 
+        0 0 10px rgba(153,0,0,0.2),
+        inset 0 0 10px rgba(0,0,0,0.6);
+
+    transition: all 0.2s ease;
+}
+
+.btn-glass {
+    animation: pulseBtn 4s ease-in-out infinite;
+}
+
+@keyframes pulseBtn {
+    0%,100% { box-shadow: 0 0 10px rgba(153,0,0,0.2); }
+    50% { box-shadow: 0 0 20px rgba(153,0,0,0.5); }
+}
+
+.btn-glass:hover {
+    background: rgba(153,0,0,0.25);
+    box-shadow: 
+        0 0 15px rgba(153,0,0,0.5),
+        inset 0 0 10px rgba(0,0,0,0.8);
+
+    transform: translateY(-1px);
+}
+
+.btn-glass:active {
+    transform: scale(0.97);
+}
+.floating-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    margin: 10px 0 15px;
+}
+
+.floating-btn {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(153,0,0,0.4);
+
+    backdrop-filter: blur(6px);
+
+    box-shadow:
+        0 0 15px rgba(153,0,0,0.3),
+        inset 0 0 10px rgba(0,0,0,0.7);
+
+    transition: all 0.2s ease;
+}
+.floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow:
+        0 0 25px rgba(255,0,0,0.6),
+        inset 0 0 12px rgba(0,0,0,0.9);
+}
+
+.floating-btn:active {
+    transform: scale(0.95);
+}
+.floating-btn {
+    animation: floatPulse 4s ease-in-out infinite;
+}
+
+@keyframes floatPulse {
+    0%,100% {
+        box-shadow: 0 0 15px rgba(153,0,0,0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(153,0,0,0.6);
+    }
+}
+.btn-floating {
+    padding: 10px 16px;
+    border-radius: 12px;
+
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(153,0,0,0.5);
+
+    color: #eee;
+    font-family: Cinzel, serif;
+    font-size: 14px;
+
+    backdrop-filter: blur(6px);
+
+    box-shadow:
+        0 0 12px rgba(153,0,0,0.3),
+        inset 0 0 10px rgba(0,0,0,0.7);
+
+    transition: all 0.2s ease;
+}
+
+.btn-floating:hover {
+    background: rgba(153,0,0,0.25);
+    transform: translateY(-2px);
+}
+
+.btn-floating:active {
+    transform: scale(0.95);
+}
+
+.btn-floating, .btn-sang, .btn-primary {
+    position: relative !important;
+    overflow: hidden !important;
+    background-image: url("ecrit.gif") !important; 
+    background-size: cover !important;
+    background-position: center !important;
+    
+    filter: brightness(1.4) contrast(1.2) saturate(1.3);
+    box-shadow: 0 0 15px rgba(153, 0, 0, 0.7) !important;
+    border: 1px solid #ff4500 !important;
+    
+    text-shadow: 2px 2px 4px #000, 0px 0px 10px #000 !important;
+    font-weight: bold !important;
+    color: #fff !important;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-floating:active, .btn-sang:active {
+    transform: scale(0.95);
+    filter: brightness(1.8);
+}
+
+.btn-floating span, .btn-sang span {
+    position: relative;
+    z-index: 2;
+}
+
+.top-bar .bubble.bubble-butin {
+    background: transparent url('parchemin.png') no-repeat center !important;
+    background-size: contain !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    outline: none !important;
+
+    width: 340px !important; 
+    height: 180px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    
+    filter: drop-shadow(12px 12px 15px rgba(0,0,0,0.9)) !important;
+    transform: rotate(-2deg) !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+}
+
+
+#labelBudgetZen {
+    font-family: 'Bangers', cursive !important;
+    font-size: 22px !important;
+    color: #ffffff !important;
+    text-shadow: 2px 2px 0px #000 !important;
+    text-transform: uppercase !important;
+    display: block !important;
+}
+
+.sanctuarum-textura {
+    font-family: 'Pirata One', cursive !important;
+    font-size: 40px !important;
+    color: #ff4500 !important;
+    margin-bottom: 0 !important;
+}
+
+/* ===================================================== */
+/* ======================= PC ========================== */
+/* ===================================================== */
+
+@media (min-width: 768px) {
+
+    .app-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .bubbles-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    #swipe-wrapper {
+        overflow: visible;
+    }
+
+    #swipe-track {
+        width: 100%;
+        transform: none !important;
+        display: flex;
+        gap: 20px;
+    }
+
+    .view-pane {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .nav-bar {
+        display: none;
+    }
+
+    #bg-panorama {
+        width: 100vw !important;
+        height: 100vh !important;
+        transform: none !important;
+        background-image: url("arriereplanPC.PNG") !important;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+}
+
+.floating-actions {
+    bottom: 30px;
+    right: 30px;
+}
+
+/* ===== TOP BAR ===== */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.title-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar .bubble {
+    padding: 10px 14px;
+    min-width: 140px;
+
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(6px);
+
+    border: 1px solid rgba(153,0,0,0.6);
+}
+
+/* ===== BOUTONS ===== */
+.floating-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 15px 0 15px;
+}
+
+/* ===== BULLES BAS ===== */
+.bubbles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .top-bar .bubble {
+        width: 100%;
+    }
+
+    .bubbles-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.top-bar {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    padding: 10px 15px !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+.title-block {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 0 1 auto !important;
+}
+
+.main-title-gothic {
+    display: block !important;
+    font-family: 'Pirata One', cursive !important;
+    font-size: 50px !important;
+    color: #ff4500 !important;
+    text-transform: uppercase !important;
+    text-shadow: 3px 3px 8px #000 !important;
+    margin: 0 !important;
+    line-height: 0.9 !important;
+}
+
+.subtitle-box {
+    display: block !important;
+    font-family: 'Bangers', cursive !important;
+    font-size: 18px !important;
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px #000 !important;
+    margin-top: 5px !important;
+}
+
+
+
+.bubble-hint {
+    display: none !important;
+}
+
+@media (min-width: 1024px) {
+    .main-title-gothic {
+        font-size: 3.5rem !important;
+    }
+    
+
+    .bubble-hint {
+        display: block;
+    }
+}
+
+input[type="text"], 
+input[type="number"],
+#importCodeArea {
+    width: 100% !important;
+    max-width: 100% !important;
+    background: rgba(20, 20, 25, 0.8) !important;
+    border: 1px solid #444 !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    color: white !important;
+    font-family: 'Patrick Hand', cursive !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 12px !important;
+    outline: none;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 10px rgba(153, 0, 0, 0.3);
+}
+
+#catsGrid .cat-card[onclick*="add"], 
+#varsGrid .cat-card[onclick*="add"],
+.btn-add-category {
+    width: 100% !important;
+    height: 50px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-size: cover;
+    border: 1px solid var(--primary) !important;
+    border-radius: 8px !important;
+    cursor: pointer;
+    margin-top: 10px !important;
+    font-size: 1.5rem !important;
+    color: white !important;
+    box-shadow: 0 0 10px rgba(153, 0, 0, 0.4);
+}
+
+#catsGrid .cat-card[onclick*="add"]::after,
+#varsGrid .cat-card[onclick*="add"]::after {
+    content: " AJOUTER UN RITUEL";
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1rem;
+    margin-left: 10px;
+}
+
+.input-plus-group {
+    display: flex !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+}
+
+.input-plus-group input {
+    flex: 2 !important;
+    margin-bottom: 0 !important;
+}
+
+.btn-add-inline, 
+.input-plus-group button:not(.btn-plus), 
+.cat-card button[onclick*="add"]:not(.btn-plus) {
+    flex: 0 0 50px !important;
+    height: 40px !important;
+    background-image: url("bouton.gif") !important;
+    background-size: cover !important;
+    background-position: center !important;
+    border: 1px solid #ff4500 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer;
+    color: white !important;
+    font-family: 'Bangers', cursive !important;
+    font-size: 1.8rem !important;
+    text-shadow: 2px 2px 4px #000;
+    padding: 0 !important;
+    line-height: 0 !important;
+}
+
+.input-plus-group input {
+    height: 40px !important;
+    margin-bottom: 0 !important;
+}
+
+.app-container {
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+    z-index: 10;
+    padding: 10px;
+    background: transparent !important;
+}
+
+.top-bar {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+}
+
+.main-header-art, .header-pc {
+    display: none !important;
+}
+
+.floating-actions {
+    position: static !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    margin: 15px 0 !important;
+}
+
+.bubbles-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+}
+
+#swipe-wrapper {
+    margin-top: 10px !important;
+}
+
+.floating-actions {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 30px !important;
+    margin: 20px 0 !important;
+}
+
+.btn-sang {
+    position: relative !important;
+    width: 200px !important;
+    height: 60px !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    background-color: #000 !important;
+    border: 1px solid rgba(255, 69, 0, 0.4) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+    transition: transform 0.3s ease !important;
+}
+
+.btn-video {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 1 !important;
+    opacity: 0.7 !important;
+    filter: brightness(0.8) contrast(1.2);
+}
+
+.btn-sang span {
+    position: relative !important;
+    z-index: 2 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 0.9rem !important;
+    color: #fff !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    text-shadow: 2px 2px 8px #000 !important;
+}
+
+@keyframes pulse-ritual {
+    0% { box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(255, 69, 0, 0.8); }
+    100% { box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); }
+}
+
+.btn-sang {
+    animation: pulse-ritual 3s infinite ease-in-out;
+}
+
+
+#labelButin {
+    font-family: 'Cinzel', serif !important;
+    font-size: 24px !important;
+    color: #3d2b1f !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    margin-bottom: 5px !important;
+    text-shadow: none !important;
+}
+
+#sSolde {
+    font-family: 'Bangers', cursive !important;
+    font-size: 40px !important;
+    color: #800000 !important;
+    font-weight: normal !important;
+    text-shadow: none !important;
+}
+
+@media (max-width: 600px) {
+   
+
+    #labelButin {
+        font-size: 18px !important;
+    }
+
+    #sSolde {
+        font-size: 28px !important;
+    }
+}
+
+.sanctuarum-fraktur {
+    font-family: 'UnifrakturMaguntia', cursive !important;
+    font-size: 50px !important;
+    color: #ff4500 !important;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.8) !important;
+    letter-spacing: 2px;
+}
+
+.sanctuarum-textura {
+    font-family: 'Pirata One', system-ui !important;
+    font-size: 55px !important;
+    color: #ff4500 !important;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.sanctuarum-rotonde {
+    font-family: 'Almendra Display', serif !important;
+    font-size: 52px !important;
+    font-weight: bold !important;
+    color: #ff4500 !important;
+}
+
+.sanctuarum-schwabacher {
+    font-family: 'MedievalSharp', cursive !important;
+    font-size: 48px !important;
+    color: #ff4500 !important;
+    font-style: italic;
+}
+
+.skull-overlay {
+    display: none !important;
+}
+
+h1.sanctuarum-title, 
+p.budget-zen-label {
+    display: none !important;
+}
+
+.top-bar-left p, 
+#labelBudgetZen {
+    font-family: 'Bangers', cursive !important;
+    font-size: 20px !important;
+    color: #ffffff !important;
+    text-shadow: 2px 2px 0px #000 !important;
+    letter-spacing: 1px !important;
+    margin-top: 5px !important;
+    text-transform: uppercase !important;
+}
+
+
+#sSolde {
+    font-family: 'Bangers', cursive !important;
+    font-size: 40px !important;
+    color: #800000 !important;
+    
+    position: relative !important;
+    z-index: 10000 !important;
+    pointer-events: auto !important; 
+    
+    cursor: pointer !important;
+    padding: 20px !important;
+}
+
+#labelButin {
+    font-family: 'Cinzel', serif !important;
+    font-size: 22px !important;
+    color: #3d2b1f !important;
+    pointer-events: auto !important;
+}
+
+@media (max-width: 600px) {
+    .bubble-butin {
+        margin-top: -100px !important;
+        width: 180px !important; 
+        height: 100px !important;
+    }
+}
+
+#labelButin {
+    font-family: 'Cinzel', serif !important;
+    font-size: 18px !important;
+    color: #3d2b1f !important;
+    font-weight: 900 !important;
+    margin-top: 25px !important;
+    letter-spacing: 1px !important;
+}
+
+#sSolde {
+    font-family: 'Bangers', cursive !important;
+    font-size: 38px !important;
+    color: #800000 !important;
+    margin-top: -5px !important;
+}
+
+.sanctuarum-textura {
+    font-family: 'Pirata One', cursive !important;
+    font-size: 45px !important;
+    color: #ff4500 !important;
+    text-transform: uppercase !important;
+    text-shadow: 3px 3px 6px #000, 0 0 15px rgba(255, 69, 0, 0.4) !important;
+    line-height: 1 !important;
+    letter-spacing: 2px !important;
+}
+/* --- FORCE L'AFFICHAGE ET DESCEND LE TITRE --- */
+.sanctuarum-textura {
+    display: block !important; /* On s'assure qu'il n'est pas caché */
+    visibility: visible !important;
+    position: relative !important;
+    top: 20px !important; /* On le descend de 20px pour qu'il ne soit pas collé en haut */
+    left: 15px !important; /* On le décolle un peu du bord gauche */
+    z-index: 9999 !important; /* Il passe devant tout le monde */
+    
+    /* Ton style reste inchangé */
+    font-family: 'Pirata One', cursive !important;
+    font-size: 50px !important;
+    color: #ff4500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 4px !important;
+}
+
+/* On s'assure que le conteneur du haut ne cache pas ce qui dépasse */
+header.top-bar {
+    overflow: visible !important;
+    height: auto !important;
+}
+
+/* ================= FIX MOBILE GLOBAL ================= */
+@media (max-width: 768px) {
+
+    /* ===== TOP BAR ===== */
+    .top-bar {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 10px;
+    }
+
+    .title-block {
+        align-items: center !important;
+        text-align: center;
+    }
+
+    .main-title-gothic {
+        font-size: 32px !important;
+    }
+
+    .subtitle-box {
+        font-size: 14px !important;
+    }
+
+    /* ===== BUTIN ===== */
+    .bubble-butin {
+        width: 90% !important;
+        max-width: 260px !important;
+        height: auto !important;
+        padding: 15px !important;
+        margin-top: 0 !important;
+        transform: none !important;
+    }
+
+    #sSolde {
+        font-size: 28px !important;
+        padding: 10px !important;
+    }
+
+    /* ===== BOUTONS ===== */
+    .floating-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .btn-sang {
+        width: 100% !important;
+        max-width: 280px;
+        height: 55px !important;
+    }
+
+    /* ===== BULLES ===== */
+    .bubbles-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+    }
+
+    .bubble {
+        width: 100% !important;
+        height: auto !important;
+        padding: 10px !important;
+    }
+
+    .bubble-val {
+        font-size: 18px !important;
+    }
+
+    /* ===== CARTES ===== */
+    .cat-card {
+        padding: 10px !important;
+    }
+
+    .cat-header {
+        font-size: 12px !important;
+    }
+
+    /* ===== INPUT + BOUTON + ===== */
+    .input-plus-group {
+        flex-direction: row !important;
+    }
+
+    .input-plus-group input {
+        font-size: 14px !important;
+    }
+
+    .btn-add-inline {
+        width: 45px !important;
+        height: 40px !important;
+        font-size: 1.5rem !important;
+    }
+
+    /* ===== LIGNES ITEMS ===== */
+    .item-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        font-size: 13px;
+    }
+
+    .item-row span {
+        flex: 1;
+        text-align: left;
+    }
+
+    .item-row button {
+        flex: 0 0 auto;
+    }
+}
+/* ===== LOADER RITUEL ===== */
+#ritualLoader {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 30000;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-top: 4px solid #ff0000;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.ritual-text {
+    margin-top: 15px;
+    font-family: 'Cinzel';
+    color: #ff0000;
+    letter-spacing: 2px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@media (max-width: 768px) {
+
+    .floating-actions {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+    }
+
+    .btn-sang {
+        flex: 1 !important;
+        height: 50px !important;
+        font-size: 11px !important;
+        padding: 0 !important;
+    }
+
+    .btn-sang span {
+        font-size: 10px !important;
+        letter-spacing: 1px !important;
+    }
+
+    .btn-video {
+        opacity: 0.5 !important;
+    }
+}
+@media (max-width: 768px) {
+
+}
+/* ===== BARRE STATS TYPE BANQUE ===== */
+.stats-bar {
+    display: flex;
+    width: 100%;
+    margin: 10px 0 15px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(153,0,0,0.4);
+
+    box-shadow:
+        0 0 15px rgba(153,0,0,0.2),
+        inset 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* chaque bloc */
+.stat {
+    flex: 1;
+    text-align: center;
+    padding: 10px 5px;
+    position: relative;
+}
+
+/* séparateurs */
+.stat:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: rgba(153,0,0,0.3);
+}
+
+/* label */
+.stat-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #aaa;
+    font-family: 'Cinzel', serif;
+}
+
+/* valeur */
+.stat-value {
+    font-size: 18px;
+    font-family: 'Bangers', cursive;
+    color: #fff;
+    margin-top: 3px;
+}
+
+/* ===== MOBILE OPTI ===== */
+@media (max-width: 768px) {
+    .stat-label {
+        font-size: 9px;
+    }
+
+    .stat-value {
+        font-size: 16px;
+    }
+}
+/* ===== BUTIN HORIZONTAL ===== */
+.bubble-butin {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 15px;
+
+    padding: 15px !important;
+}
+
+/* partie gauche */
+.butin-left {
+    display: flex;
+    flex-direction: column;
+}
+
+/* partie droite */
+.butin-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* barre */
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(153,0,0,0.3);
+}
+
+/* jauge */
+
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    .bubble-butin {
+        flex-direction: row !important; /* reste horizontal */
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .butin-left {
+        flex: 0 0 auto;
+    }
+
+    .butin-right {
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .progress-bar {
+        width: 100%;
+        max-width: 120px; /* limite la taille */
+        height: 8px;      /* plus fin */
+    }
+
+    #sSolde {
+        font-size: 24px !important;
+    }
+
+    #labelButin {
+        font-size: 14px !important;
+    }
+}
+
+.progress-bar {
+    width: 90px;
+}
+/* ===== BUTIN LAYOUT ===== */
+.bubble-butin {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+/* texte */
+.butin-left {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== JAUGE VERTICALE ===== */
+.butin-gauge {
+    width: 20px;
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+}
+
+/* fond */
+.gauge-bg {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(153,0,0,0.4);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* remplissage */
+
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    .butin-gauge {
+        width: 16px;
+        height: 60px;
+    }
+
+    #sSolde {
+        font-size: 24px !important;
+    }
+
+    #labelButin {
+        font-size: 14px !important;
+    }
+}
+
+/* ===== BUTIN + BARRE ALIGNÉS ===== */
+
+.bubble-butin {
+    width: 100% !important;
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Ligne principale */
+.butin-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Texte gauche */
+.butin-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Barre droite */
+.butin-gauge-container {
+    flex: 1;
+    max-width: 120px;
+    height: 10px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(153,0,0,0.3);
+}
+
+/* Barre interne */
+
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+
+    .bubble-butin {
+        max-width: 95% !important;
+    }
+
+    .butin-gauge-container {
+        max-width: 90px; /* réduit pour mobile */
+        height: 8px;
+    }
+
+    #sSolde {
+        font-size: 28px !important;
+    }
+
+    #labelButin {
+        font-size: 14px !important;
+    }
+}
+.butin-main {
+    align-items: center;
+}
+/* ===== FIX RADICAL MOBILE BUTIN ===== */
+
+.bubble-butin {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    padding: 10px !important;
+    transform: none !important;
+}
+
+/* ligne horizontale */
+.butin-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+/* texte */
+.butin-left {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* barre */
+.butin-bar {
+    flex: 1 !important;
+    max-width: 120px !important;
+    height: 10px !important;
+    background: rgba(0,0,0,0.6) !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+}
+
+/* jauge */
+#fioleContainer {
+    position: relative;
+    width: 30px;      /* adapte à ta fiole */
+    height: 100px;    /* adapte à ta fiole */
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+
+    .butin-bar {
+        max-width: 80px !important;
+        height: 8px !important;
+    }
+
+    #sSolde {
+        font-size: 26px !important;
+    }
+
+    #labelButin {
+        font-size: 12px !important;
+    }
+}
+/* ===== FIOLE ===== */
+
+.fiole {
+    position: relative;
+    width: 40px;
+    height: 90px;
+    
+    border: 2px solid rgba(153,0,0,0.6);
+    border-radius: 20px 20px 12px 12px;
+
+    background: rgba(0,0,0,0.7);
+    overflow: hidden;
+
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8),
+                0 0 10px rgba(153,0,0,0.3);
+}
+
+/* liquide */
+#bloodFill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    
+    background: linear-gradient(to top, #400000, #ff0000);
+    
+    transition: height 0.4s ease;
+}
+
+/* effet liquide */
+#bloodFill::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    
+    background: radial-gradient(circle, rgba(255,0,0,0.6) 20%, transparent 70%);
+    animation: bloodWave 2s infinite linear;
+}
+
+@keyframes bloodWave {
+    0% { transform: translateX(-20%); }
+    100% { transform: translateX(20%); }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+    .fiole {
+        width: 30px;
+        height: 70px;
+    }
+}
+.stat:nth-child(1) .stat-value { color: #ff5555; } /* différé */
+.stat:nth-child(2) .stat-value { color: #ffaa00; } /* oracle */
+.stat:nth-child(3) .stat-value { color: #55ff88; } /* libre */
+.btn-plus {
+    position: relative;
+    width: 45px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ff4500;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-plus span {
+    position: relative;
+    z-index: 2;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    color: white;
+    text-shadow: 2px 2px 4px #000;
+}
+.btn-plus {
+    position: relative;
+    
+    width: 50px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
+
+    height: 40px !important;
+    min-height: 40px !important;
+
+    flex: 0 0 50px !important; /* CRITIQUE → empêche l’écrasement */
+
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ff4500;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-plus-video {
+    position: absolute;
+    inset: 0;              /* remplit EXACTEMENT le bouton */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 0.7;
+}
+.input-plus-group {
+    display: flex;
+}
+.btn-plus {
+    padding: 0 !important;
+    line-height: 0 !important;
+}
+.btn-grand-rituel {
+    position: relative;
+    overflow: hidden;
+
+    background-image: url("reinitialisation.JPG") !important;
+    background-size: cover !important;
+    background-position: center !important;
+
+    /* optionnel pour lisibilité */
+    filter: brightness(0.85) contrast(1.1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@keyframes dangerBlink {
+    0%   { filter: brightness(1); }
+    50%  { filter: brightness(2.2); }
+    100% { filter: brightness(1); }
+}
+
+.gauge-danger {
+    animation: dangerBlink 0.6s infinite;
+}
+
+    </style>
+</head>
+<div id="ritualLoader">
+    <div class="spinner"></div>
+    <div class="ritual-text">Rituel en cours...</div>
+</div>
+<body>
+    <!-- ERREUR 3 CORRIGÉE : balises déplacées ici depuis le <head> -->
+
+
+    <div id="bg-panorama"></div>
+    <div id="bg-fog"></div>
+
+
+    <div class="app-container">
+        
+ 
+            <div class="title-block">
+                <h1 class="main-title-gothic">SANCTUARIUM</h1>
+                <span class="subtitle-box">Mon budget zen</span>
+            </div>
+
+<div class="bubble-butin">
+    <div class="butin-row">
+
+    <div class="butin-left">
+        <div id="labelButin">MON BUTIN</div>
+        <div id="sSolde">0.00€</div>
+    </div>
+
+    <div class="fiole">
+        <div id="bloodFill"></div>
+    </div>
+
+</div>
+</div>
+</div>
+
+
+ <div class="floating-actions">
+    <div class="btn-sang" onclick="showInternalSave()">
+        <video src="flammes2.mp4" autoplay loop muted playsinline class="btn-video"></video>
+        <span>ÉCRIT AVEC TON SANG</span>
+    </div>
+<div class="btn-sang btn-grand-rituel" onclick="grandRituel()" style="border-color: #ffd700 !important;">
+    <span style="color: #ffd700;">GRAND RITUEL</span>
+</div>
+    <div class="btn-sang" onclick="openImportModal()">
+        <video src="flammes2.mp4" autoplay loop muted playsinline class="btn-video"></video>
+        <span>INVOCATION</span>
+    </div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-label">DIFFÉRÉ</div>
+        <div class="stat-value" id="sEncours">0€</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">ORACLE</div>
+        <div class="stat-value" id="sPrev">0€</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">LIBRE</div>
+        <div class="stat-value" id="sReel">0€</div>
+    </div>
+</div>
+
+        <div id="swipe-wrapper">
+            <div id="swipe-track">
+                
+                <div class="view-pane">
+                    <div class="section-title">CHARGES FIXES</div>
+                    <div id="catsGrid"></div>
+                </div>
+
+                <div class="view-pane">
+                    <div class="section-title">JOURNAL CB</div>
+                    <div class="cat-card journal-form" style="background-image: url('ecrit.gif');">
+                        <input type="text" id="txLib" placeholder="Lieu de l'offrande...">
+                        <div class="input-plus-group">
+                            <input type="number" id="txAmt" placeholder="Montant">
+                            <div class="btn-add-inline" onclick="addTx()">+</div>
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="txType" value="immediat" checked> Immédiat</label>
+                            <label><input type="radio" name="txType" value="differe"> Différé</label>
+                        </div>
+                    </div>
+                    <div id="txList"></div>
+                </div>
+
+                <div class="view-pane">
+                    <div class="section-title">VARIABLES</div>
+                    <div id="varsGrid"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <button class="nav-btn" onclick="nav(0)">FIXES</button>
+            <button class="nav-btn active" onclick="nav(1)">JOURNAL</button>
+            <button class="nav-btn" onclick="nav(2)">VARIABLES</button>
+        </nav>
+    </div>
+
+    <!-- Modals -->
+    <div id="internalSaveBox" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#1a0000; border:2px solid #990000; padding:20px; z-index:2000; width:80%;">
+    <h3 style="font-family:'Cinzel'; color:#ff0000;">TON CODE DE SANG</h3>
+    <textarea id="saveCodeArea" style="width:100%; height:100px; background:#000; color:#fff; border:1px solid #990000;" readonly></textarea>
+    <br><br>
+    <button class="btn-sang" onclick="copyCode()">COPIER</button>
+    <button class="btn-sang" onclick="document.getElementById('internalSaveBox').style.display='none'">FERMER</button>
+</div>
+
+<div id="importModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; flex-direction:column;">
+    <h3 style="font-family:'Cinzel'; color:#ff0000;">INVOQUER UN RITUEL</h3>
+    <textarea id="importCodeArea" placeholder="Colle ton code ici..." style="width:80%; height:100px; background:#000; color:#fff; border:1px solid #990000;"></textarea>
+    <br>
+    <button class="btn-sang" onclick="confirmImport()">INVOQUER</button>
+    <button class="btn-sang" onclick="closeImportModal()">ANNULER</button>
+</div>
+
+    <div id="butinModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:10000;align-items:center;justify-content:center;padding:20px;">
+        <div style="background:#0a0a0f;border:2px solid #990000;border-radius:16px;padding:25px;width:100%;max-width:320px;text-align:center;box-shadow:0 0 30px rgba(153,0,0,0.4);">
+            <div style="font-family:Cinzel,serif;font-size:12px;letter-spacing:3px;color:#aaa;margin-bottom:15px;">MON BUTIN</div>
+            <input id="butinInput" type="number" style="width:100%;font-family:Bangers;font-size:32px;text-align:center;background:rgba(153,0,0,0.15);border:1px solid #990000;color:#fff;border-radius:8px;padding:10px;margin-bottom:15px;">
+            <button class="btn btn-sang" style="width:100%;" onclick="confirmButin()"><span>Confirmer</span></button>
+            <button onclick="document.getElementById('butinModal').style.display='none'" style="display:block;margin:12px auto 0;color:#555;background:none;border:none;font-size:13px;">Annuler</button>
+        </div>
+    </div>
+
+    <div id="customPrompt" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:20000; align-items:center; justify-content:center;">
+        <div style="background:#1a1a1a; border:2px solid #ff4500; padding:20px; border-radius:15px; width:300px; text-align:center; box-shadow: 0 0 20px #ff4500;">
+            <h3 style="font-family:'Pirata One', cursive; color:#ff4500; font-size:24px; margin-bottom:15px;">MODIFIER LE BUTIN</h3>
+            <input type="number" id="promptInput" style="width:100%; padding:10px; background:#000; border:1px solid #ff4500; color:#fff; font-family:'Bangers', cursive; font-size:20px; text-align:center; margin-bottom:20px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-around;">
+                <button onclick="closeCustomPrompt()" style="background:#333; color:#fff; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-family:'Patrick Hand';">ANNULER</button>
+                <button onclick="saveCustomPrompt()" style="background:#990000; color:#fff; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-family:'Bangers'; letter-spacing:1px;">VALIDER</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+const KEY = 'sanct_v4_triple';
+
+const catConfig = { m:'Maison', c:'Credits', v:'Transport', a:'Abos', s:'Sante', o:'Autres' };
+const varCats = ['Alimentaire', 'Carburants', 'Loisirs', 'Cadeaux', 'Equipement'];
+
+let store = JSON.parse(localStorage.getItem(KEY)) || {
+    solde: 3000,
+    transactions: [],
+    fixes: Object.keys(catConfig).map(id => ({id, items:[]})),
+    variables: varCats.map(name => ({name, items:[]}))
+};
+
+const IS_PC  = () => window.innerWidth >= 768;
+let currentPage = 1;
+
+const track   = document.getElementById('swipe-track');
+const wrapper = document.getElementById('swipe-wrapper');
+const bg      = document.getElementById('bg-panorama');
+
+function nav(idx) {
+    currentPage = idx;
+    track.style.transition = 'transform 0.35s ease';
+    track.style.transform  = `translateX(${idx * -33.33}%)`;
+    if (!IS_PC()) bg.style.transform = `translateX(${-idx * 100}vw)`;
+
+    document.querySelectorAll('.nav-btn')
+        .forEach((b,i) => b.classList.toggle('active', i===idx));
+}
+
+/* ================= SWIPE ================= */
+
+let touchStartX=0, touchStartY=0, isDragging=false;
+
+wrapper.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isDragging  = false;
+    track.style.transition = 'none';
+    if (!IS_PC()) bg.style.transition = 'none';
+}, {passive:true});
+
+wrapper.addEventListener('touchmove', e => {
+    const dx = e.touches[0].clientX - touchStartX;
+    const dy = e.touches[0].clientY - touchStartY;
+    if (!isDragging && Math.abs(dy) > Math.abs(dx)) return;
+    isDragging = true;
+    e.preventDefault();
+    track.style.transform = `translateX(calc(${currentPage * -33.33}% + ${dx}px))`;
+    if (!IS_PC()) bg.style.transform = `translateX(calc(${currentPage * -100}vw + ${dx}px))`;
+}, {passive:false});
+
+wrapper.addEventListener('touchend', e => {
+    if (!isDragging) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx < -50 && currentPage < 2) currentPage++;
+    else if (dx > 50 && currentPage > 0) currentPage--;
+    nav(currentPage);
+}, {passive:true});
+
+/* ================= CALCUL ================= */
+
+function update() {
+    localStorage.setItem(KEY, JSON.stringify(store));
+
+    let tf=0,pf=0,tv=0,pv=0;
+
+    store.fixes.forEach(c=>c.items.forEach(it=>{
+        tf+=it.amt;
+        if(it.done) pf+=it.amt;
+    }));
+
+    store.variables.forEach(v=>v.items.forEach(it=>{
+        tv+=it.amt;
+        if(it.done) pv+=it.amt;
+    }));
+
+    const tCB   = store.transactions.filter(t=>t.type!=='differe').reduce((s,t)=>s+t.amt,0);
+    const tDiff = store.transactions.filter(t=>t.type==='differe').reduce((s,t)=>s+t.amt,0);
+
+    document.getElementById('sPrev').textContent    = (store.solde-tf-tv).toFixed(2)+'€';
+    document.getElementById('sReel').textContent    = (store.solde-pf-pv-tCB).toFixed(2)+'€';
+    document.getElementById('sEncours').textContent = tDiff.toFixed(2)+'€';
+    document.getElementById('sSolde').textContent   = store.solde.toFixed(2)+'€';
+// --- ANIMATION JS RADICALE ---
+const gauge = document.getElementById('bloodFill');
+
+if (gauge) {
+const libre = store.solde - pf - pv - tCB;
+
+// 👉 pourcentage du restant (réel)
+let pct = store.solde > 0 ? (libre / store.solde) * 100 : 0;
+
+// clamp sécurité
+pct = Math.max(0, Math.min(100, pct));
+const r = Math.round(255 * (1 - pct / 100)); // rouge augmente quand ça baisse
+const g = Math.round(255 * (pct / 100));     // vert diminue quand ça baisse
+
+const color = `rgb(${r}, ${g}, 0)`;
+// seuil critique
+if (pct <= 10) {
+    gauge.classList.add("gauge-danger");
+} else {
+    gauge.classList.remove("gauge-danger");
+}
+
+gauge.style.background = `linear-gradient(to top, ${color}, rgba(0,0,0,0.3))`;
+
+gauge.style.height = pct + "%";
+}
+}
+
+
+/* ================= SOLDE ================= */
+
+function editSolde() {
+    document.getElementById('butinModal').style.display='flex';
+    document.getElementById('butinInput').value=store.solde;
+}
+
+function confirmButin() {
+    const v=parseFloat(document.getElementById('butinInput').value);
+    if(!isNaN(v)){
+        store.solde=v;
+        render();
+    }
+    document.getElementById('butinModal').style.display='none';
+}
+
+/* ================= RENDER ================= */
+
+function render() {
+
+    const gridF=document.getElementById('catsGrid');
+    gridF.innerHTML='';
+
+    store.fixes.forEach(cat=>{
+        const div=document.createElement('div');
+        div.className='cat-card';
+
+        div.innerHTML=`
+        <div class="cat-header">
+            <span>${catConfig[cat.id]}</span>
+            <span>${cat.items.reduce((s,i)=>s+i.amt,0)}€</span>
+        </div>
+
+        ${cat.items.map((it,i)=>`
+            <div class="item-row">
+                <input type="checkbox" ${it.done?'checked':''} onclick="toggleItem('fix','${cat.id}',${i})">
+                <span>${it.l}</span>
+                <span>${it.amt}€</span>
+                <button onclick="delItem('fix','${cat.id}',${i})">×</button>
+            </div>
+        `).join('')}
+
+        <div style="display:flex;gap:5px;">
+            <input type="text" id="fi-l-${cat.id}" placeholder="Nom">
+            <input type="number" id="fi-a-${cat.id}" placeholder="€">
+  <button class="btn-plus" onclick="addItem('fix','${cat.id}')">
+    <video src="plus.mp4" autoplay loop muted playsinline class="btn-plus-video"></video>
+    <span>+</span>
+</button>
+        </div>`;
+
+        gridF.appendChild(div);
+    });
+
+    const gridV=document.getElementById('varsGrid');
+    gridV.innerHTML='';
+
+    store.variables.forEach((cat,idx)=>{
+        const div=document.createElement('div');
+        div.className='cat-card';
+
+        div.innerHTML=`
+        <div class="cat-header">
+            <span>${cat.name}</span>
+            <span>${cat.items.reduce((s,i)=>s+i.amt,0)}€</span>
+        </div>
+
+        ${cat.items.map((it,i)=>`
+            <div class="item-row">
+                <input type="checkbox" ${it.done?'checked':''} onclick="toggleItem('var',${idx},${i})">
+                <span>${it.l}</span>
+                <span>${it.amt}€</span>
+                <button onclick="delItem('var',${idx},${i})">×</button>
+            </div>
+        `).join('')}
+
+        <div style="display:flex;gap:5px;">
+            <input type="text" id="vi-l-${idx}" placeholder="Objet">
+            <input type="number" id="vi-a-${idx}" placeholder="€">
+  <button class="btn-plus" onclick="addItem('var',${idx})">
+    <video src="plus.mp4" autoplay loop muted playsinline class="btn-plus-video"></video>
+    <span>+</span>
+</button>
+        </div>`;
+
+        gridV.appendChild(div);
+    });
+
+    renderTx();
+    update();
+}
+
+/* ================= ACTIONS ================= */
+
+function addItem(type,id){
+    const l=document.getElementById(`${type==='fix'?'fi':'vi'}-l-${id}`);
+    const a=document.getElementById(`${type==='fix'?'fi':'vi'}-a-${id}`);
+    if(!l.value||!a.value)return;
+
+    const list=type==='fix'
+        ? store.fixes.find(c=>c.id===id).items
+        : store.variables[id].items;
+
+    list.push({l:l.value,amt:parseFloat(a.value),done:false});
+    l.value=''; a.value='';
+    render();
+}
+
+function toggleItem(type,id,i){
+    const list=type==='fix'
+        ? store.fixes.find(c=>c.id===id).items
+        : store.variables[id].items;
+
+    list[i].done=!list[i].done;
+    render();
+}
+
+function delItem(type,id,i){
+    const list=type==='fix'
+        ? store.fixes.find(c=>c.id===id).items
+        : store.variables[id].items;
+
+    list.splice(i,1);
+    render();
+}
+
+/* ================= TRANSACTIONS ================= */
+
+function addTx(){
+    const l=document.getElementById('txLib');
+    const a=document.getElementById('txAmt');
+    const t=document.querySelector('input[name="txType"]:checked').value;
+
+    if(l.value&&a.value){
+        store.transactions.unshift({
+            lib:l.value,
+            amt:parseFloat(a.value),
+            type:t
+        });
+        l.value=''; a.value='';
+        render();
+    }
+}
+
+function renderTx(){
+    document.getElementById('txList').innerHTML=
+        store.transactions.map((t,i)=>`
+        <div class="item-row">
+            <div>${t.lib} (${t.type})</div>
+            <div>-${t.amt}€ 
+                <button onclick="delTx(${i})">×</button>
+            </div>
+        </div>`).join('');
+}
+
+function delTx(i){
+    store.transactions.splice(i,1);
+    render();
+}
+
+/* ================= INIT ================= */
+
+document.getElementById('sSolde').addEventListener('click', editSolde);
+
+render();
+function grandRituel() {
+    if (!confirm("Lancer le Grand Rituel ?")) return;
+
+    // Active loader + coupe animations
+    document.getElementById('ritualLoader').style.display = 'flex';
+    document.body.classList.add('no-anim');
+
+    setTimeout(() => {
+
+        const resteLibre = parseFloat(document.getElementById('sReel').textContent);
+        store.solde = resteLibre;
+
+        store.transactions = [];
+
+        store.fixes.forEach(cat => cat.items.forEach(it => it.done = false));
+        store.variables.forEach(cat => cat.items.forEach(it => it.done = false));
+
+        render();
+
+        // désactive loader
+        document.getElementById('ritualLoader').style.display = 'none';
+        document.body.classList.remove('no-anim');
+
+    }, 1200); // durée du rituel (1.2s)
+}
+/* ================= SYSTEME D'INVOCATION & SAUVEGARDE ================= */
+
+function showInternalSave() {
+    const box = document.getElementById('internalSaveBox');
+    const area = document.getElementById('saveCodeArea');
+    // On transforme les données en code secret (Base64)
+    area.value = btoa(JSON.stringify(store)); 
+    box.style.display = 'block';
+}
+
+function copyCode() {
+    const area = document.getElementById('saveCodeArea');
+    area.select();
+    document.execCommand('copy');
+    alert("Le rituel est gravé dans ton presse-papier !");
+}
+
+function openImportModal() {
+    document.getElementById('importModal').style.display = 'flex';
+}
+
+function closeImportModal() {
+    document.getElementById('importModal').style.display = 'none';
+}
+
+function confirmImport() {
+    const code = document.getElementById('importCodeArea').value;
+    try {
+        const decoded = JSON.parse(atob(code));
+        if (confirm("Invoquer ces données écrasera ton sanctuaire actuel. Continuer ?")) {
+            store = decoded;
+            save(); // Sauvegarde dans le localStorage
+            location.reload(); // Recharge pour tout mettre à jour
+        }
+    } catch (e) {
+        alert("Le code d'invocation est corrompu ou incomplet...");
+    }
+}
+
+</script>
+</body>
+</html>
